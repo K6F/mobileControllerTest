@@ -1,0 +1,143 @@
+<html>
+   <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="js/jQuery.min.js"></script>
+    <script type="text/javascript" src="js/JSON.js"></script>
+    <script type="text/javascript">
+      document.body.addEventListener('touchstart'，function(event){
+        event.preventDefault();
+        sendTouchMsg(event,'touchstart');
+      });
+      document.body.addEventListener('touchmove'，function(event){
+        event.preventDefault();
+        sendTouchMsg(event,'touchmove');
+      });
+      document.body.addEventListener('touchend'，function(event){
+        event.preventDefault();
+        sendTouchMsg(event,'touchend');
+      });
+      function sendTouchMsg (event,eventName) {
+        // 初始化 json对象
+        var touch_json = {
+            "type"    : "EVENT",
+            "content" : {
+                "eventName": eventName,
+                "timestamp":0,
+                "env":{
+                  "clientW":$(window).width(),
+                  "clientH":$(window).height(),
+                },
+                "avgs": {
+                  "touches": {
+                      "length" : event.touches.length,
+                      "item"   : []
+                  }, 
+                  "changedTouches": {
+                      "length" : event.changedTouches.length,
+                      "item"   : []
+                  }
+                }
+            }
+        };
+        touch_json.content.timestamp=new Date().getTime();
+        // touches
+        for (var i = 0; i < event.touches.length; i++) {
+          touch_json.content.avgs.touches.item[i]={
+            "identifier" : event.touches[i].identifier,
+            "clientX"    : event.touches[i].clientX,
+            "clientY"    : event.touches[i].clientY
+          };
+        };
+        // changedTouches
+        for (var i = 0; i < event.changedTouches.length; i++) {
+          touch_json.content.avgs.changedTouches.item[i]={
+            "identifier" : event.changedTouches[i].identifier,
+            "clientX"    : event.changedTouches[i].clientX,
+            "clientY"    : event.changedTouches[i].clientY
+          };
+        };
+        try{
+          top.ws.send(touch_json);
+        }catch(e){
+          top.app.showStateConnecting();
+        };
+      }
+    </script>
+    <script type="text/javascript">
+//  when it's pc
+    var mouseisdown=false;
+$(function() {
+      $('body').mousedown(function(event) {
+        mouseisdown=true;
+        sendMouseMsg(event,'touchstart');
+      });
+      $('body').mousemove(function(event) {
+          event.preventDefault();
+          sendMouseMsg(event,'touchmove');
+      });
+      $('body').mouseup(function(event) {
+        mouseisdown=false;
+        sendMouseMsg(event,'touchend');
+      });
+});
+
+      function sendMouseMsg (event,eventName) {
+        // 初始化 json对象
+        var touch_json = {
+            "type"    : "EVENT",
+            "content" : {
+                "eventName": eventName,
+                "timestamp": 0,
+                "env":{
+                  "clientW":$(window).width(),
+                  "clientH":$(window).height(),
+                },
+                "avgs": {
+                  "touches": {
+                      "length" : 1,
+                      "item"   : []
+                  }, 
+                  "changedTouches": {
+                      "length" : 1,
+                      "item"   : []
+                  }
+                }
+            }
+        };
+        touch_json.content.timestamp=new Date().getTime();
+        // touches
+        for (var i = 0; i < touch_json.content.avgs.touches.length; i++) {
+          touch_json.content.avgs.touches.item[i]={
+                                                    "identifier":'mouse',
+                                                    "clientX":event.clientX,
+                                                    "clientY":event.clientY};
+        };
+        // changedTouches
+        for (var i = 0; i < touch_json.content.avgs.changedTouches.length; i++) {
+          touch_json.content.avgs.changedTouches.item[i]={
+                                                    "identifier":'mouse',
+                                                    "clientX":event.clientX,
+                                                    "clientY":event.clientY};
+        };
+        try{
+          top.ws.send(touch_json);
+        }catch(e){
+          alert(touch_json.toJSONString());
+        };
+      }
+
+    </script>
+    <style type="text/css">
+      body{
+        width:100%;
+        height:calc(100% - 30px);
+        padding:0px;
+        border: 0px;
+        margin:0px;
+      }
+    </style>
+   </head>
+   <body>
+     
+   </body>
+   </html>

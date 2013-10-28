@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <script type='text/javascript' src='js/jQuery.min.js'></script>
+    <script type='text/javascript' src='js/buttonControl.js'></script>
+    <script type='text/javascript'>
+      var cur_config;
+      function Orient(){ return true;}
+      function ResizeHorizontal(){
+        $('body').removeClass('V').addClass('H');
+        var win_w =parseInt($(window).width());
+        var win_h =parseInt($(window).height());
+        var ctn_w =parseInt(win_w);
+        var ctn_h;
+        var ctn_t;
+        var btn_border_size=parseInt($('#container .row button').css('borderWidth'));
+        var btn_size = ((parseInt(win_h/3)<(ctn_w/5))?parseInt(win_h/3):(ctn_w/5)) - btn_border_size*2;;
+        ctn_h =(btn_size+btn_border_size*2)*3;
+        ctn_t = parseInt((win_h-ctn_h)/2)
+        $('#container .row button').width(btn_size).height(btn_size).css({fontSize:(btn_size*.309)});
+
+        $('#container').width(ctn_w).height(ctn_h).css({
+          top:ctn_t,
+          left:0
+        });
+        $('footer').css({top:"0px",left:(ctn_w)});
+
+        var row_l = (ctn_w - btn_size*5)/2
+        $('#row1').width(btn_size+btn_border_size*2).css({
+          top:"0px",
+          left:row_l 
+        });
+        $('#row2').width((btn_size+btn_border_size*2)*3).css({
+          top:"0px",
+          left:row_l+(btn_size+btn_border_size*2)
+        });
+      }
+      function ResizeVertical(){
+        $('body').removeClass('H').addClass('V');
+        var win_w =parseInt($(window).width());
+        var win_h =parseInt($(window).height());
+        var ctn_w;
+        var ctn_h =parseInt(win_h);
+        var ctn_l;
+        var btn_border_size=parseInt($('#container .row button').css('borderWidth'));
+        var btn_size = ((parseInt(win_w/3)<(ctn_h/5))?parseInt(win_w/3):(ctn_h/5)) - btn_border_size*2;;
+        ctn_w =(btn_size+btn_border_size*2)*3;
+        ctn_l = parseInt((win_w-ctn_w)/2)
+        $('#container .row button').width(btn_size).height(btn_size).css({fontSize:(btn_size*.309)});
+        $('#container').width(ctn_w).height(ctn_h).css({
+          top:0,
+          left:ctn_l
+        });
+        $('footer').css({top:(ctn_h),left:"0px"});
+
+        $('.row').width((btn_size+btn_border_size*2)*3);
+
+      }
+      function ChangePage (config) {
+        cur_config = config;
+        // 按钮显示文字
+        $('.row button').each(function (idx) {
+          $(this).text(config[idx].text);
+        });
+      }
+      $(function () {
+        Orient()? ResizeVertical():ResizeHorizontal();
+        //  绑定resize
+        window.onresize=function(){Orient()? ResizeVertical():ResizeHorizontal();}
+        // 绑定按钮
+        $('button').click(function (e) {
+          var idx = $(this).attr('id');
+          ResizeVertical();
+          eval(cur_config[idx].action);
+        });
+        ChangePage(conf_num);
+      });
+    </script>
+    <style type='text/css'>
+      * {margin:0;padding:0;}
+      body{width:100%;height:100%;}
+      section{position:fixed;}
+      section .row button {float:left;}
+      /*button{border-width:1px}*/
+    </style>
+    <style type='text/css'>
+      .V section .row  {width:100%;height:20%;clear:right;}
+      .V section #row2 {width:100%;height:60%}
+      .H section .row  {height:100%;position:absolute;}
+    </style>
+  </head>
+  <body>
+    <section id='container'>
+      <div id='row1' class='row'>
+        <button id='0'>#</button>
+        <button id='1'>#</button>
+        <button id='2'>#</button>
+      </div>
+      <div id='row2' class='row'>
+          <button id='3'>#</button>
+          <button id='4'>#</button>
+          <button id='5'>#</button>
+          <button id='6'>#</button>
+          <button id='7'>#</button>
+          <button id='8'>#</button>
+          <button id='9'>#</button>
+          <button id='10'>#</button>
+          <button id='11'>#</button>
+      </div>
+      <div id='row3' class='row'>
+        <button id='12'>#</button>
+        <button id='13'>#</button>
+        <button id='14'>#</button>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>Connecting...</title>
+    <style type="text/css">
+      section{margin:auto;width:260px;}
+      table tbody th{text-align: right;min-width:3em;border:0px;}
+      table tbody td{min-width:10px;border:0px;}
+      table tbody td input{width:30px;}
+      table tbody td input#ip{width:200px;}
+      table tbody td input#port{width:40px;}
+      .clear{clear:both;}
+    </style>
+  </head>
+  <body>
+  <section>
+    <table>
+      <tbody>
+        <tr>
+          <th>ip:</th>
+          <td colspan="7"><input type="text" id="ip"></td>
+          <!--<td><input type="text" id="ip1"></td>
+          <td>.</td>
+          <td><input type="text" id="ip2"></td>
+          <td>.</td>
+          <td><input type="text" id="ip3"></td>
+          <td>.</td>
+          <td><input type="text" id="ip4"></td> -->
+        </tr>
+        <tr>
+          <th>端口:</td>
+          <td colspan="3"><input type="text" id="port"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <button id="connect">链接</button>
+            <script type="text/javascript">
+            var obj = {
+              "ip":document.getElementById('ip'),
+              "port":document.getElementById('port'),
+              "connect":document.getElementById('connect')
+            }
+              function initBind () {
+                obj.ip.value        = top.ws.host;
+                obj.port.value      = top.ws.port;
+                obj.connect.onclick = function () {
+                  top.ws.host = obj.ip.value;
+                  top.ws.port = obj.port.value;
+                  top.ws.init();
+                }
+              }
+              window.onload=initBind;
+            </script>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  </body>
+</html>
